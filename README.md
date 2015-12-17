@@ -8,6 +8,8 @@ Using by freetype API
 $ text2svg "Hello, World\!" --font="/Library/Fonts/Times New Roman.ttf" > test.svg && open test.svg -a /Applications/Google\ Chrome.app
 ```
 
+![img](https://raw.githubusercontent.com/ksss/text2svg/master/data/sample.jpg)
+
 ## Installation
 
 Add this line to your application's Gemfile:
