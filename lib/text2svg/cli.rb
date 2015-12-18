@@ -17,6 +17,9 @@ module Text2svg
           o.fill = arg
         end
       }.parse!(ARGV)
+      unless o.font
+        raise ArgumentError, "require `--font` cli option. see --help"
+      end
       text = ARGV[0] || $stdin.read
       puts Text2svg::Typography.build(text, font: o.font, text_align: o.text_align, stroke: :none, fill: o.fill)
     end
