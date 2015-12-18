@@ -12,7 +12,11 @@ module Text2svg
     class << self
       def build(text, font:, stroke: :black, stroke_width: 1, fill: :black, text_align: :left)
         g, w, h = path(text, font: font, stroke: stroke, stroke_width: stroke_width, fill: fill, text_align: text_align)
-        %(<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 #{w} #{h}">\n#{g}</svg>)
+        svg = %(<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 #{w} #{h}">\n)
+        svg << "<title>#{text}</title>\n"
+        svg << g
+        svg << "</svg>\n"
+        svg
       end
 
       def path(text, font:, stroke: :black, stroke_width: 1, fill: :black, text_align: :left)
