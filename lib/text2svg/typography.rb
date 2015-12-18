@@ -10,7 +10,7 @@ module Text2svg
     INTER_CHAR_SPACE_DIV = 50r
 
     class << self
-      def build(text, font:, stroke: :black, stroke_width: 1, fill: :black, text_align: :left)
+      def build(text, font:, stroke: :none, stroke_width: 1, fill: :black, text_align: :left)
         g, w, h = path(text, font: font, stroke: stroke, stroke_width: stroke_width, fill: fill, text_align: text_align)
         svg = %(<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 #{w} #{h}">\n)
         svg << "<title>#{text}</title>\n"
@@ -19,7 +19,7 @@ module Text2svg
         svg
       end
 
-      def path(text, font:, stroke: :black, stroke_width: 1, fill: :black, text_align: :left)
+      def path(text, font:, stroke: :none, stroke_width: 1, fill: :black, text_align: :left)
         FreeType::API::Font.open(font) do |f|
           f.set_char_size(0, 0, 3000, 3000)
 
