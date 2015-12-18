@@ -2,8 +2,8 @@ require 'text2svg/cli'
 
 module Text2svgCLITest
   def test_start(t)
-    ARGV[0] = 'abc'
     %w(left right center).each do |text_align|
+      ARGV[0] = "Hello,\nWorld!"
       ARGV[1] = '--font=/Library/Fonts/Times New Roman.ttf'
       ARGV[2] = "--text-align=#{text_align}"
       out = capture do
