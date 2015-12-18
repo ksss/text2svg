@@ -10,7 +10,7 @@ module Text2svg
         opt.on('-f', '--font [FONT]', 'font file path (require)') do |arg|
           o.font = arg
         end
-        opt.on('--text-align [ALIGN]', 'text align left,right or center (default left)') do |arg|
+        opt.on('--text-align [ALIGN]', 'text align left,right or center (default left)', %i(left right center)) do |arg|
           o.text_align = arg
         end
         opt.on('--fill [FILL]', 'text fill color (default black)') do |arg|
