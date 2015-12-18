@@ -20,6 +20,10 @@ module Text2svg
       end
 
       def path(text, font:, stroke: :none, stroke_width: 1, fill: :black, text_align: :left)
+        stroke ||= :none
+        fill ||= :black
+        text_align ||= :left
+
         FreeType::API::Font.open(font) do |f|
           f.set_char_size(0, 0, 3000, 3000)
 
