@@ -5,7 +5,7 @@ module Text2svg
   class Typography
     WHITESPACE = /[[:space:]]/
     IDEOGRAPHIC_SPACE = /[\u{3000}]/
-    NEW_LINE = /[\n]/
+    NEW_LINE = /[\u{000A}]/
     NOTDEF_GLYPH_ID = 0
     INTER_CHAR_SPACE_DIV = 50r
 
