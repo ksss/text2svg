@@ -33,7 +33,7 @@ module Text2svg
         text_align ||= :left
         text.force_encoding(encoding).encode!(Encoding::UTF_8)
 
-        FreeType::API::Font.open(font) do |f|
+        FreeType::API::Font.open(File.expand_path(font)) do |f|
           f.set_char_size(0, 0, 3000, 3000)
 
           lines = []
