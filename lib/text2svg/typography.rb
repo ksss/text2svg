@@ -1,5 +1,6 @@
 require 'freetype'
 require 'text2svg/outline2d'
+require 'text2svg/option'
 
 module Text2svg
   class Typography
@@ -10,16 +11,11 @@ module Text2svg
     INTER_CHAR_SPACE_DIV = 50r
 
     class << self
-      def build(text, font:, stroke: :none, stroke_width: 1, fill: :black, text_align: :left, encoding: Encoding::UTF_8)
-        g, w, h = path(
-          text,
-          font: font,
-          stroke: stroke,
-          stroke_width: stroke_width,
-          fill: fill,
-          text_align: text_align,
-          encoding: encoding,
-        )
+      def build(text, option)
+        if Hash === option
+          option = Option.from_hash(option)
+        end
+        g, w, h = path(text, option)
         svg = %(<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 #{w} #{h}">\n)
         svg << "<title>#{text}</title>\n"
         svg << g
@@ -27,13 +23,13 @@ module Text2svg
         svg
       end
 
-      def path(text, font:, stroke: :none, stroke_width: 1, fill: :black, text_align: :left, encoding: Encoding::UTF_8)
-        stroke ||= :none
-        fill ||= :black
-        text_align ||= :left
-        text.force_encoding(encoding).encode!(Encoding::UTF_8)
+      def path(text, option)
+        if Hash === option
+          option = Option.from_hash(option)
+        end
+        text.force_encoding(option.encoding).encode!(Encoding::UTF_8)
 
-        FreeType::API::Font.open(File.expand_path(font)) do |f|
+        FreeType::API::Font.open(File.expand_path(option.font)) do |f|
           f.set_char_size(0, 0, 3000, 3000)
 
           lines = []
@@ -97,7 +93,7 @@ module Text2svg
             y += line_height
             before_char = nil
 
-            case text_align.to_sym
+            case option.text_align.to_sym
             when :center
               x += (max_width - line_width) / 2r
             when :right
@@ -114,7 +110,7 @@ module Text2svg
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
               output << %!  <g transform="translate(#{x.to_i},0)">\n!
               if cs.draw?
-                output << %(    <path stroke="#{stroke}" stroke-width="#{stroke_width}" fill="#{fill}" d="#{cs.d}"/>\n)
+                output << %(    <path stroke="#{option.stroke}" stroke-width="#{option.stroke_width}" fill="#{option.fill}" d="#{cs.d}"/>\n)
               end
               x += cs.width
               x += inter_char_space if cs != line.last

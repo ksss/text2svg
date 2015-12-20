@@ -2,10 +2,15 @@ require 'text2svg/typography'
 
 module Text2svg
   module CLI
-    Option = Struct.new(:font, :text_align, :fill, :encoding)
-
     def start
-      o = CLI::Option.new(nil, :left, :black, Encoding::UTF_8)
+      o = Option.new(
+        nil,
+        :left,
+        :black,
+        :none,
+        1,
+        Encoding::UTF_8,
+      )
       OptionParser.new.tap { |opt|
         opt.on('-f', '--font FONT', 'font file path (require)') do |arg|
           o.font = arg
@@ -24,14 +29,7 @@ module Text2svg
         raise ArgumentError, "require `--font` cli option. see --help"
       end
       text = ARGV[0] || $stdin.read
-      puts Text2svg::Typography.build(
-        text,
-        font: o.font,
-        text_align: o.text_align,
-        stroke: :none,
-        fill: o.fill,
-        encoding: o.encoding,
-      )
+      puts Text2svg::Typography.build(text, o)
     end
     module_function :start
   end
