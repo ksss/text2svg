@@ -10,6 +10,8 @@ module Text2svg
         :none,
         1,
         Encoding::UTF_8,
+        :none,
+        1,
       )
       OptionParser.new.tap { |opt|
         opt.on('-f', '--font FONT', 'font file path (require)') do |arg|
@@ -23,6 +25,12 @@ module Text2svg
         end
         opt.on('--encoding ENCODING', 'input text encoding (default utf-8)') do |arg|
           o.encoding = Encoding.find(arg)
+        end
+        opt.on('--stroke COLOR', "stroke color setting (default none)") do |arg|
+          o.stroke = arg
+        end
+        opt.on('--stroke-width NUM', "stroke-width value (default 1)") do |arg|
+          o.stroke_width = arg
         end
       }.parse!(ARGV)
       unless o.font
