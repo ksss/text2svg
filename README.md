@@ -10,6 +10,21 @@ $ text2svg "Hello, World\!" --font="/Library/Fonts/Times New Roman.ttf" > test.s
 
 ![img](https://raw.githubusercontent.com/ksss/text2svg/master/data/sample.jpg)
 
+## Option
+
+```shell
+$ text2svg --help
+Usage: text2svg [options]
+    -f, --font FONT                  font file path (require)
+        --text-align ALIGN           text align left,right or center (default left)
+        --fill FILL                  text fill color (default black)
+        --encoding ENCODING          input text encoding (default utf-8)
+        --stroke COLOR               stroke color setting (default none)
+        --stroke-width NUM           stroke-width value (default 1)
+        --bold                       embolden outline (default false)
+        --italic                     oblique outline (default false)
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
