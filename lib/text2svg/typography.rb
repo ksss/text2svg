@@ -90,6 +90,7 @@ module Text2svg
           y = 0r
           output = ''
           line_height = f.line_height
+          output << %(<g paint-order="#{option.paint_order}" stroke="#{option.stroke}" stroke-width="#{option.stroke_width}" fill="#{option.fill}">\n)
           lines.zip(width_by_line).each do |(line, line_width)|
             x = 0r
             y += line_height
@@ -106,7 +107,7 @@ module Text2svg
               warn 'text_align must be left,right or center'
             end
 
-            output << %!<g paint-order="#{option.paint_order}" stroke="#{option.stroke}" stroke-width="#{option.stroke_width}" fill="#{option.fill}" transform="translate(0,#{y.to_i})">\n!
+            output << %!<g transform="translate(0,#{y.to_i})">\n!
 
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
@@ -121,6 +122,7 @@ module Text2svg
             end
             output << "</g>\n".freeze
           end
+          output << "</g>\n".freeze
 
           Content.new(output, max_width.to_i, (y + line_height / 4).to_i)
         end
