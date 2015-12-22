@@ -90,7 +90,7 @@ module Text2svg
           y = 0r
           output = ''
           line_height = f.line_height
-          output << %(<g paint-order="#{option.paint_order}" stroke="#{option.stroke}" stroke-width="#{option.stroke_width}" fill="#{option.fill}">\n)
+          output << %(<g #{option.option}>\n)
           lines.zip(width_by_line).each do |(line, line_width)|
             x = 0r
             y += line_height

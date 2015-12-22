@@ -52,14 +52,6 @@ module Text2svgCLITest
     check(t)
   end
 
-  def test_stroke(t)
-    ARGV[0] = 'Hello'
-    ARGV[1] = '--font=/Library/Fonts/Times New Roman.ttf'
-    ARGV[2] = '--stroke=red'
-    ARGV[3] = '--stroke-width=100'
-    check(t)
-  end
-
   def capture
     out = StringIO.new
     orig = $stdout

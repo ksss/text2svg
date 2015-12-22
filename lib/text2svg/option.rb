@@ -2,15 +2,10 @@ module Text2svg
   class Option < Struct.new(
     :font,
     :text_align,
-    :fill,
-    :stroke,
-    :stroke_width,
     :encoding,
-    :stroke,
-    :stroke_width,
     :bold,
     :italic,
-    :paint_order,
+    :option,
   )
 
     class << self
