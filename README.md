@@ -17,12 +17,10 @@ $ text2svg --help
 Usage: text2svg [options]
     -f, --font FONT                  font file path (require)
         --text-align ALIGN           text align left,right or center (default left)
-        --fill FILL                  text fill color (default black)
         --encoding ENCODING          input text encoding (default utf-8)
-        --stroke COLOR               stroke color setting (default none)
-        --stroke-width NUM           stroke-width value (default 1)
         --bold                       embolden outline (default false)
         --italic                     oblique outline (default false)
+        --option STRING              tag options (default nil)
 ```
 
 ## Installation
