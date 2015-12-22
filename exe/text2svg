@@ -1,6 +1,5 @@
 #! /usr/bin/env ruby
 
-require 'optparse'
 require 'text2svg/cli'
 
 Text2svg::CLI.start

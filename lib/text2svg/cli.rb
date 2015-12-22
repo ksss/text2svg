@@ -1,3 +1,4 @@
+require 'optparse'
 require 'text2svg/typography'
 require 'text2svg/option'
 
