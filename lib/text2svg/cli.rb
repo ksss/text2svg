@@ -26,15 +26,15 @@ module Text2svg
         opt.on('--encoding ENCODING', 'input text encoding (default utf-8)') do |arg|
           o.encoding = Encoding.find(arg)
         end
-        opt.on('--stroke COLOR', "stroke color setting (default none)") do |arg|
+        opt.on('--stroke COLOR', 'stroke color setting (default none)') do |arg|
           o.stroke = arg
         end
-        opt.on('--stroke-width NUM', "stroke-width value (default 1)") do |arg|
+        opt.on('--stroke-width NUM', 'stroke-width value (default 1)') do |arg|
           o.stroke_width = arg
         end
       }.parse!(ARGV)
       unless o.font
-        raise ArgumentError, "require `--font` cli option. see --help"
+        raise ArgumentError, 'require `--font` cli option. see --help'
       end
       text = ARGV[0] || $stdin.read
       puts Text2svg::Typography.build(text, o)
