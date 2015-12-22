@@ -10,6 +10,7 @@ module Text2svg
     :stroke_width,
     :bold,
     :italic,
+    :paint_order,
   )
 
     class << self

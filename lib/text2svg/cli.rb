@@ -15,6 +15,7 @@ module Text2svg
         1,               # stroke_width
         false,           # bold
         false,           # italic
+        :none,           # paint_order
       )
       OptionParser.new.tap { |opt|
         opt.on('-f', '--font FONT', 'font file path (require)') do |arg|
@@ -40,6 +41,9 @@ module Text2svg
         end
         opt.on('--italic', 'oblique outline (default false)') do |arg|
           o.italic = arg
+        end
+        opt.on('--paint-order ORDER', 'set paint-order (default none)') do |arg|
+          o.paint_order = arg
         end
       }.parse!(ARGV)
       unless o.font

@@ -112,7 +112,7 @@ module Text2svg
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
               output << %!  <g transform="translate(#{x.to_i},0)">\n!
               if cs.draw?
-                output << %(    <path stroke="#{option.stroke}" stroke-width="#{option.stroke_width}" fill="#{option.fill}" d="#{cs.d}"/>\n)
+                output << %(    <path paint-order="#{option.paint_order}" stroke="#{option.stroke}" stroke-width="#{option.stroke_width}" fill="#{option.fill}" d="#{cs.d}"/>\n)
               end
               x += cs.width
               x += inter_char_space if cs != line.last
