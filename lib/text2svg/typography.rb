@@ -46,7 +46,6 @@ module Text2svg
               next
             end
 
-            # glyph登録されていない文字
             glyph_id = f.char_index(char)
             glyph = if glyph_id == 0
               f.notdef
@@ -54,7 +53,6 @@ module Text2svg
               f.glyph(char)
             end
 
-            # glyphが登録されているが字形が登録されていない文字
             if glyph.outline.tags.length == 0
               glyph = f.notdef
             end
