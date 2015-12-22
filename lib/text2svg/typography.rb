@@ -106,13 +106,13 @@ module Text2svg
               warn 'text_align must be left,right or center'
             end
 
-            output << %!<g transform="translate(0,#{y.to_i})">\n!
+            output << %!<g paint-order="#{option.paint_order}" stroke="#{option.stroke}" stroke-width="#{option.stroke_width}" fill="#{option.fill}" transform="translate(0,#{y.to_i})">\n!
 
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
               output << %!  <g transform="translate(#{x.to_i},0)">\n!
               if cs.draw?
-                output << %(    <path paint-order="#{option.paint_order}" stroke="#{option.stroke}" stroke-width="#{option.stroke_width}" fill="#{option.fill}" d="#{cs.d}"/>\n)
+                output << %(    <path d="#{cs.d}"/>\n)
               end
               x += cs.width
               x += inter_char_space if cs != line.last
