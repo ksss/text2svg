@@ -28,7 +28,7 @@ module Text2svg
         opt.on('--italic', 'oblique outline (default false)') do |arg|
           o.italic = arg
         end
-        opt.on('--option STRING', 'tag options (default nil)') do |arg|
+        opt.on('--option STRING', 'decorate options (default nil)(e.g. fill="red" stroke-width="100")') do |arg|
           o.option = arg
         end
       }.parse!(ARGV)

@@ -20,7 +20,7 @@ Usage: text2svg [options]
         --encoding ENCODING          input text encoding (default utf-8)
         --bold                       embolden outline (default false)
         --italic                     oblique outline (default false)
-        --option STRING              tag options (default nil)
+        --option STRING              decorate options (default nil)(e.g. fill="red" stroke-width="100")
 ```
 
 ## Installation
