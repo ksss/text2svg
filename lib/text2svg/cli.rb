@@ -12,6 +12,8 @@ module Text2svg
         Encoding::UTF_8,
         :none,
         1,
+        false,
+        false,
       )
       OptionParser.new.tap { |opt|
         opt.on('-f', '--font FONT', 'font file path (require)') do |arg|
@@ -31,6 +33,12 @@ module Text2svg
         end
         opt.on('--stroke-width NUM', 'stroke-width value (default 1)') do |arg|
           o.stroke_width = arg
+        end
+        opt.on('--bold', "embolden outline (default false)") do |arg|
+          o.bold = arg
+        end
+        opt.on('--italic', "oblique outline (default false)") do |arg|
+          o.italic = arg
         end
       }.parse!(ARGV)
       unless o.font

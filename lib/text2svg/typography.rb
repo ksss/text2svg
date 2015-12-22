@@ -58,6 +58,10 @@ module Text2svg
             if glyph.outline.tags.length == 0
               glyph = f.notdef
             end
+
+            glyph.bold if option.bold
+            glyph.italic if option.italic
+
             kern = f.kerning_unfitted(before_char, char).x
 
             width, is_draw = if IDEOGRAPHIC_SPACE.match char

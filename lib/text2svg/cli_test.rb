@@ -38,6 +38,20 @@ module Text2svgCLITest
     end
   end
 
+  def test_bold(t)
+    ARGV[0] = 'Hello'
+    ARGV[1] = '--font=/Library/Fonts/Times New Roman.ttf'
+    ARGV[2] = '--bold'
+    check(t)
+  end
+
+  def test_italic(t)
+    ARGV[0] = 'Hello'
+    ARGV[1] = '--font=/Library/Fonts/Times New Roman.ttf'
+    ARGV[2] = '--italic'
+    check(t)
+  end
+
   def test_stroke(t)
     ARGV[0] = 'Hello'
     ARGV[1] = '--font=/Library/Fonts/Times New Roman.ttf'

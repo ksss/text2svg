@@ -8,6 +8,8 @@ module Text2svg
     :encoding,
     :stroke,
     :stroke_width,
+    :bold,
+    :italic,
   )
 
     class << self
