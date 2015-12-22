@@ -45,7 +45,7 @@ module Text2svg
         raise ArgumentError, 'require `--font` cli option. see --help'
       end
       text = ARGV[0] || $stdin.read
-      puts Text2svg::Typography.build(text, o)
+      puts Text2svg::Typography.build(text, o).to_s
     end
     module_function :start
   end

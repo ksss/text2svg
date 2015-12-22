@@ -15,12 +15,12 @@ module Text2svg
         if Hash === option
           option = Option.from_hash(option)
         end
-        g, w, h = path(text, option)
-        svg = %(<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 #{w} #{h}">\n)
+        content = path(text, option)
+        svg = %(<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 #{content.width} #{content.height}">\n)
         svg << "<title>#{text}</title>\n"
-        svg << g
+        svg << content.data
         svg << "</svg>\n"
-        svg
+        Content.new(svg, content.width, content.height)
       end
 
       def path(text, option)
@@ -124,7 +124,7 @@ module Text2svg
             output << "</g>\n".freeze
           end
 
-          [output, max_width.to_i, (y + line_height / 4).to_i]
+          Content.new(output, max_width.to_i, (y + line_height / 4).to_i)
         end
       end
     end
@@ -133,6 +133,12 @@ module Text2svg
   CharSet = Struct.new(:char, :width, :is_draw, :d) do
     def draw?
       is_draw
+    end
+  end
+
+  Content = Struct.new(:data, :width, :height) do
+    def to_s
+      data
     end
   end
 end
