@@ -124,7 +124,9 @@ module Text2svg
           end
           output << "</g>\n".freeze
 
-          Content.new(output, max_width.to_i, (y + line_height / 4).to_i)
+          option_width = 0
+          option_width += space_width / 1.5 if option.italic
+          Content.new(output, max_width.to_i + option_width, (y + line_height / 4).to_i)
         end
       end
     end
