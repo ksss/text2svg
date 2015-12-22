@@ -1,4 +1,5 @@
 require 'text2svg/typography'
+require 'text2svg/option'
 
 module Text2svg
   module CLI
