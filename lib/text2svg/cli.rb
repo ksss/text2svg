@@ -35,10 +35,10 @@ module Text2svg
         opt.on('--stroke-width NUM', 'stroke-width value (default 1)') do |arg|
           o.stroke_width = arg
         end
-        opt.on('--bold', "embolden outline (default false)") do |arg|
+        opt.on('--bold', 'embolden outline (default false)') do |arg|
           o.bold = arg
         end
-        opt.on('--italic', "oblique outline (default false)") do |arg|
+        opt.on('--italic', 'oblique outline (default false)') do |arg|
           o.italic = arg
         end
       }.parse!(ARGV)
