@@ -60,8 +60,6 @@ module Text2svg
             glyph.bold if option.bold
             glyph.italic if option.italic
 
-            kern = f.kerning_unfitted(before_char, char).x
-
             width, is_draw = if IDEOGRAPHIC_SPACE.match char
               [space_width * 2r, false]
             elsif WHITESPACE.match char
