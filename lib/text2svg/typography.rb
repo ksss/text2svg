@@ -28,6 +28,8 @@ module Text2svg
         if Hash === option
           option = Option.from_hash(option)
         end
+        return Content.new("", 0, 0) if text.empty?
+
         option.encoding ||= Encoding::UTF_8
         text.force_encoding(option.encoding).encode!(Encoding::UTF_8)
 
