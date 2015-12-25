@@ -5,7 +5,7 @@ module Text2svg
     :encoding,
     :bold,
     :italic,
-    :option,
+    :attribute,
   )
 
     class << self

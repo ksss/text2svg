@@ -88,7 +88,7 @@ module Text2svg
           y = 0r
           output = ''
           line_height = f.line_height
-          output << %(<g #{option.option}>\n)
+          output << %(<g #{option.attribute}>\n)
           lines.zip(width_by_line).each do |(line, line_width)|
             x = 0r
             y += line_height

@@ -11,7 +11,7 @@ module Text2svg
         Encoding::UTF_8, # encoding
         false,           # bold
         false,           # italic
-        nil,             # option
+        nil,             # attribute
       )
       OptionParser.new.tap { |opt|
         opt.on('-f', '--font FONT', 'font file path (require)') do |arg|
@@ -29,8 +29,8 @@ module Text2svg
         opt.on('--italic', 'oblique outline (default false)') do |arg|
           o.italic = arg
         end
-        opt.on('--option STRING', 'decorate options (default nil)(e.g. fill="red" stroke-width="100")') do |arg|
-          o.option = arg
+        opt.on('--attribute STRING', 'decorate options (default nil)(e.g. fill="red" stroke-width="100")') do |arg|
+          o.attribute = arg
         end
       }.parse!(ARGV)
       unless o.font
