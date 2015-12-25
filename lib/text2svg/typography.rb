@@ -15,6 +15,7 @@ module Text2svg
         if Hash === option
           option = Option.from_hash(option)
         end
+        option.encoding ||= Encoding::UTF_8
         content = path(text, option)
         svg = %(<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 #{content.width} #{content.height}">\n)
         svg << "<title>#{text}</title>\n"
@@ -27,6 +28,7 @@ module Text2svg
         if Hash === option
           option = Option.from_hash(option)
         end
+        option.encoding ||= Encoding::UTF_8
         text.force_encoding(option.encoding).encode!(Encoding::UTF_8)
 
         FreeType::API::Font.open(File.expand_path(option.font)) do |f|
