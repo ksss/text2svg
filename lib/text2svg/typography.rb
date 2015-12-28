@@ -21,7 +21,7 @@ module Text2svg
         svg << "<title>#{text}</title>\n"
         svg << content.data
         svg << "</svg>\n"
-        Content.new(svg, content.width, content.height)
+        Content.new(svg, content.width, content.height, content.notdef_indexes)
       end
 
       def path(text, option)
@@ -33,6 +33,7 @@ module Text2svg
         option.encoding ||= Encoding::UTF_8
         text.force_encoding(option.encoding).encode!(Encoding::UTF_8)
 
+        notdef_indexes = []
         FreeType::API::Font.open(File.expand_path(option.font)) do |f|
           f.set_char_size(0, 0, 3000, 3000)
 
@@ -42,7 +43,7 @@ module Text2svg
 
           before_char = nil
           space_width = f.glyph(' '.freeze).char_width
-          text.each_char do |char|
+          text.each_char.with_index do |char, index|
             if NEW_LINE.match char
               line = []
               lines << line
@@ -52,12 +53,14 @@ module Text2svg
 
             glyph_id = f.char_index(char)
             glyph = if glyph_id == 0
+              notdef_indexes << index
               f.notdef
             else
               f.glyph(char)
             end
 
             if glyph.outline.tags.length == 0
+              notdef_indexes << index
               glyph = f.notdef
             end
 
@@ -128,7 +131,7 @@ module Text2svg
 
           option_width = 0
           option_width += space_width / 1.5 if option.italic
-          Content.new(output, (max_width + option_width).to_i, (y + line_height / 4).to_i)
+          Content.new(output, (max_width + option_width).to_i, (y + line_height / 4).to_i, notdef_indexes)
         end
       end
     end
@@ -140,7 +143,7 @@ module Text2svg
     end
   end
 
-  Content = Struct.new(:data, :width, :height) do
+  Content = Struct.new(:data, :width, :height, :notdef_indexes) do
     def to_s
       data
     end
