@@ -3,6 +3,9 @@ require 'text2svg/outline2d'
 require 'text2svg/option'
 
 module Text2svg
+  class OptionError < StandardError
+  end
+
   class Typography
     WHITESPACE = /[[:space:]]/
     IDEOGRAPHIC_SPACE = /[\u{3000}]/
@@ -35,6 +38,9 @@ module Text2svg
         text.force_encoding(option.encoding).encode!(Encoding::UTF_8)
 
         notdef_indexes = []
+        unless option.font
+          raise OptionError, 'should be set `font\' option'
+        end
         FreeType::API::Font.open(File.expand_path(option.font)) do |f|
           f.set_char_size(0, 0, 3000, 3000)
 
