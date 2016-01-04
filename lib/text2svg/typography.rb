@@ -31,6 +31,7 @@ module Text2svg
         return Content.new('', 0, 0) if text.nil? || text.empty?
 
         option.encoding ||= Encoding::UTF_8
+        option.text_align ||= :left
         text.force_encoding(option.encoding).encode!(Encoding::UTF_8)
 
         notdef_indexes = []
