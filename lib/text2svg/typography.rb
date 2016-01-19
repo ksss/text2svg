@@ -123,13 +123,11 @@ module Text2svg
 
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
-              output << %!  <g transform="translate(#{x.to_i},0)">\n!
               if cs.draw?
-                output << %(    <path d="#{cs.d}"/>\n)
+                output << %!  <path transform="translate(#{x.to_i},0)" d="#{cs.d}"/>\n!
               end
               x += cs.width
               x += inter_char_space if cs != line.last
-              output << "  </g>\n".freeze
               before_char = cs.char
             end
             output << "</g>\n".freeze
