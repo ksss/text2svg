@@ -23,6 +23,14 @@ Usage: text2svg [options]
         --option STRING              decorate options (default nil)(e.g. fill="red" stroke-width="100")
 ```
 
+## Ruby API
+
+```ruby
+require 'text2svg'
+puts Text2svg('Hello, World!', font: "/Library/Fonts/Times New Roman.ttf", text_align: :left, bold: true)
+#=> "<svg ...>"
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
