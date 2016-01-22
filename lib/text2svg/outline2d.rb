@@ -29,10 +29,10 @@ module Text2svg
           curve_pt = nil
           start = 1
         else
-          if last_pt.on_curve?
-            first_pt = last_pt
+          first_pt = if last_pt.on_curve?
+            last_pt
           else
-            first_pt = FreeType::API::Point.new(0, (first_pt.x + last_pt.x) / 2, (first_pt.y + last_pt.y) / 2)
+            FreeType::API::Point.new(0, (first_pt.x + last_pt.x) / 2, (first_pt.y + last_pt.y) / 2)
           end
           curve_pt = first_pt
         end
@@ -63,10 +63,10 @@ module Text2svg
         end
 
         next unless first_pt != last_pt
-        if curve_pt
-          path << ['Q', curve_pt.x, -curve_pt.y, first_pt.x, -first_pt.y]
-        else
-          path << ['L', first_pt.x, -first_pt.y]
+        path << if curve_pt
+                  ['Q', curve_pt.x, -curve_pt.y, first_pt.x, -first_pt.y]
+                else
+                  ['L', first_pt.x, -first_pt.y]
         end
       end
       path << ['z'] if 0 < path.length
