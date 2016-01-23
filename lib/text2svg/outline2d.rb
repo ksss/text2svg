@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'freetype'
 
 module Text2svg
