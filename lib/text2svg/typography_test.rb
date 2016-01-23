@@ -52,4 +52,15 @@ module Text2svgTypographyTest
       t.error('return value was break')
     end
   end
+
+  def benchmark_build(b)
+    str = [*'!'..'z'].join
+    opt = Text2svg::Option.new('/Library/Fonts/Times New Roman.ttf')
+    b.reset_timer
+    i = 0
+    while i < b.n
+      Text2svg::Typography.build(str, opt)
+      i += 1
+    end
+  end
 end
