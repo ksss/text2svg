@@ -79,7 +79,7 @@ module Text2svg
             else
               [glyph.char_width, true]
             end
-            line << CharSet.new(char, width, is_draw, Outline2d.new(glyph.outline).to_d)
+            line << CharSet.new(char, width, is_draw, Outline2d.new(glyph.outline))
           end
 
           inter_char_space = space_width / INTER_CHAR_SPACE_DIV
@@ -121,7 +121,7 @@ module Text2svg
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
               if cs.draw?
-                output << %!  <path transform="translate(#{x.to_i},0)" d="#{cs.d}"/>\n!
+                output << %!  <path transform="translate(#{x.to_i},0)" d="#{cs.outline2d.to_d}"/>\n!
               end
               x += cs.width
               x += inter_char_space if cs != line.last
@@ -139,7 +139,7 @@ module Text2svg
     end
   end
 
-  CharSet = Struct.new(:char, :width, :is_draw, :d) do
+  CharSet = Struct.new(:char, :width, :is_draw, :outline2d) do
     def draw?
       is_draw
     end
