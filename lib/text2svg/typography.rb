@@ -121,7 +121,7 @@ module Text2svg
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
               if cs.draw?
-                output << %!  <path transform="translate(#{x.to_i},0)" d="#{cs.outline2d.to_d}"/>\n!
+                output << %!  <path transform="matrix(1,0,0,1,#{x.to_i},0)" d="#{cs.outline2d.to_d}"/>\n!
               end
               x += cs.width
               x += inter_char_space if cs != line.last
