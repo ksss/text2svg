@@ -102,7 +102,7 @@ module Text2svg
           y = 0r
           output = ''
           line_height = f.line_height
-          output << %(<g #{option.attribute}>\n)
+          output << %(<g #{option.attribute}>\n) if option.attribute
           lines.zip(width_by_line).each do |(line, line_width)|
             x = 0r
             y += line_height
@@ -132,7 +132,7 @@ module Text2svg
             end
             output << "</g>\n".freeze
           end
-          output << "</g>\n".freeze
+          output << "</g>\n".freeze if option.attribute
 
           option_width = 0
           option_width += space_width / 1.5 if option.italic

@@ -22,23 +22,26 @@ module Text2svgTypographyTest
       opt.text_align = text_align
       [Encoding::UTF_8, Encoding::ASCII_8BIT].each do |encoding|
         opt.encoding = encoding
-        [false, true].each do |bold|
-          opt.bold = bold
-          [false, true].each do |italic|
-            opt.italic = italic
-            begin
-              c = Text2svg::Typography.build("\u{0041}", opt)
-            rescue
-              t.log(opt)
-              raise
-            end
+        [nil, 'fill="red"'].each do |attribute|
+          opt.attribute = attribute
+          [false, true].each do |bold|
+            opt.bold = bold
+            [false, true].each do |italic|
+              opt.italic = italic
+              begin
+                c = Text2svg::Typography.build('A', opt)
+              rescue
+                t.log(opt)
+                raise
+              end
 
-            unless Text2svg::Content === c
-              t.error('return value was break')
-            end
+              unless Text2svg::Content === c
+                t.error('return value was break')
+              end
 
-            unless c.data.encoding == Encoding::UTF_8
-              t.error('encoding was changed')
+              unless c.data.encoding == Encoding::UTF_8
+                t.error('encoding was changed')
+              end
             end
           end
         end
