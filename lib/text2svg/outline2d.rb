@@ -76,9 +76,7 @@ module Text2svg
     end
 
     def to_d
-      to_a.map { |(command, *args)|
-        "#{command}#{args.join(' ')}"
-      }.join('')
+      to_a.join(' ')
     end
   end
 end
