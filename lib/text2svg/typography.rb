@@ -48,13 +48,11 @@ module Text2svg
           line = []
           lines << line
 
-          before_char = nil
           space_width = f.glyph(' '.freeze).char_width
           text.each_char.with_index do |char, index|
             if NEW_LINE.match char
               line = []
               lines << line
-              before_char = nil
               next
             end
 
@@ -81,7 +79,6 @@ module Text2svg
             else
               [glyph.char_width, true]
             end
-            before_char = char
             line << CharSet.new(char, width, is_draw, Outline2d.new(glyph.outline).to_d)
           end
 
