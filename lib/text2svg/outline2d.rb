@@ -7,7 +7,7 @@ module Text2svg
       @outline = outline
     end
 
-    def to_d
+    def to_a
       end_ptd_of_counts = @outline.contours
       contours = []
       contour = []
@@ -72,7 +72,11 @@ module Text2svg
       end
       path << ['z'] if 0 < path.length
 
-      path.map { |(command, *args)|
+      path
+    end
+
+    def to_d
+      to_a.map { |(command, *args)|
         "#{command}#{args.join(' ')}"
       }.join('')
     end
