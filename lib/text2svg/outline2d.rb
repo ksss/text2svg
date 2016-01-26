@@ -4,14 +4,10 @@ require 'freetype'
 module Text2svg
   class Outline2d
     def initialize(outline)
-      @outline = outline
-    end
-
-    def to_a
-      end_ptd_of_counts = @outline.contours
+      end_ptd_of_counts = outline.contours
       contours = []
       contour = []
-      @outline.points.each.with_index do |point, index|
+      outline.points.each.with_index do |point, index|
         contour << point
         if index == end_ptd_of_counts.first
           end_ptd_of_counts.shift
@@ -72,7 +68,11 @@ module Text2svg
       end
       path << ['z'] if 0 < path.length
 
-      path
+      @path = path
+    end
+
+    def to_a
+      @path
     end
 
     def to_d
