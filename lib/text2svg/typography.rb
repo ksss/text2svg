@@ -116,7 +116,7 @@ module Text2svg
               warn 'text_align must be left,right or center'
             end
 
-            output << %!<g transform="translate(0,#{y.to_i})">\n!
+            output << %!<g transform="matrix(1,0,0,1,0,#{y.to_i})">\n!
 
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
