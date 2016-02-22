@@ -72,14 +72,14 @@ module Text2svg
             glyph.bold if option.bold
             glyph.italic if option.italic
 
-            width, is_draw = if IDEOGRAPHIC_SPACE.match char
-              [space_width * 2r, false]
+            hori_advance, width, is_draw = if IDEOGRAPHIC_SPACE.match char
+              [space_width * 2r, space_width * 2r, false]
             elsif WHITESPACE.match char
-              [space_width, false]
+              [space_width, space_width, false]
             else
-              [glyph.char_width, true]
+              [glyph.metrics[:horiAdvance], glyph.metrics[:width], true]
             end
-            line << CharSet.new(char, width, is_draw, Outline2d.new(glyph.outline))
+            line << CharSet.new(char, hori_advance, width, is_draw, Outline2d.new(glyph.outline))
           end
 
           inter_char_space = space_width / INTER_CHAR_SPACE_DIV
@@ -87,6 +87,11 @@ module Text2svg
             before_char = nil
             if 0 < line.length
               line.map { |cs|
+                cs.width = if cs == line.last
+                  [cs.width, cs.hori_advance].max
+                else
+                  cs.hori_advance
+                end
                 w = cs.width + f.kerning_unfitted(before_char, cs.char).x
                 w.tap { before_char = cs.char }
               }.inject(:+) + (line.length - 1) * inter_char_space
@@ -139,7 +144,7 @@ module Text2svg
     end
   end
 
-  CharSet = Struct.new(:char, :width, :is_draw, :outline2d) do
+  CharSet = Struct.new(:char, :hori_advance, :width, :is_draw, :outline2d) do
     def draw?
       is_draw
     end
