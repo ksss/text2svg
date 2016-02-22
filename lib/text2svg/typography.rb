@@ -47,6 +47,7 @@ module Text2svg
           lines = []
           line = []
           lines << line
+          first_hori_bearing_x = []
 
           space_width = f.glyph(' '.freeze).char_width
           text.each_char.with_index do |char, index|
@@ -77,13 +78,17 @@ module Text2svg
             elsif WHITESPACE.match char
               [space_width, space_width, false]
             else
+              if line.empty?
+                first_hori_bearing_x << glyph.metrics[:horiBearingX]
+              end
               [glyph.metrics[:horiAdvance], glyph.metrics[:width], true]
             end
             line << CharSet.new(char, hori_advance, width, is_draw, Outline2d.new(glyph.outline))
           end
 
           inter_char_space = space_width / INTER_CHAR_SPACE_DIV
-          width_by_line = lines.map do |line|
+
+          width_by_line = lines.zip(first_hori_bearing_x).map do |(line, hori_bearing_x)|
             before_char = nil
             if 0 < line.length
               line.map { |cs|
@@ -94,7 +99,7 @@ module Text2svg
                 end
                 w = cs.width + f.kerning_unfitted(before_char, cs.char).x
                 w.tap { before_char = cs.char }
-              }.inject(:+) + (line.length - 1) * inter_char_space
+              }.inject(:+) + (line.length - 1) * inter_char_space - hori_bearing_x
             else
               0
             end
@@ -104,8 +109,10 @@ module Text2svg
           y = 0r
           output = ''
           line_height = f.line_height
+
           output << %(<g #{option.attribute}>\n) if option.attribute
-          lines.zip(width_by_line).each do |(line, line_width)|
+
+          lines.zip(width_by_line, first_hori_bearing_x).each do |(line, line_width, hori_bearing_x)|
             x = 0r
             y += line_height
             before_char = nil
@@ -126,7 +133,7 @@ module Text2svg
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
               if cs.draw?
-                output << %!  <path transform="matrix(1,0,0,1,#{x.to_i},0)" d="#{cs.outline2d.to_d}"/>\n!
+                output << %!  <path transform="matrix(1,0,0,1,#{x.to_i-hori_bearing_x},0)" d="#{cs.outline2d.to_d}"/>\n!
               end
               x += cs.width
               x += inter_char_space if cs != line.last
