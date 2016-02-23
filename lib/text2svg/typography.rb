@@ -99,7 +99,7 @@ module Text2svg
                 end
                 w = cs.width + f.kerning_unfitted(before_char, cs.char).x
                 w.tap { before_char = cs.char }
-              }.inject(:+) + (line.length - 1) * inter_char_space + hori_bearing_x
+              }.inject(:+) + (line.length - 1) * inter_char_space - [0, hori_bearing_x].min
             else
               0
             end
