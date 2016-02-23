@@ -1,5 +1,4 @@
 require 'freetype'
-require 'text2svg/outline2d'
 require 'text2svg/option'
 
 module Text2svg
@@ -83,7 +82,7 @@ module Text2svg
               end
               [glyph.metrics[:horiAdvance], glyph.metrics[:width], true]
             end
-            line << CharSet.new(char, hori_advance, width, is_draw, Outline2d.new(glyph.outline))
+            line << CharSet.new(char, hori_advance, width, is_draw, glyph.outline.svg_path_data)
           end
 
           inter_char_space = space_width / INTER_CHAR_SPACE_DIV
@@ -134,7 +133,7 @@ module Text2svg
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
               if cs.draw?
-                output << %!  <path transform="matrix(1,0,0,1,#{x.to_i},0)" d="#{cs.outline2d.to_d}"/>\n!
+                output << %!  <path transform="matrix(1,0,0,1,#{x.to_i},0)" d="#{cs.outline2d.join(' '.freeze)}"/>\n!
               end
               x += cs.width
               x += inter_char_space if cs != line.last
