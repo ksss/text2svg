@@ -65,7 +65,7 @@ module Text2svg
               f.glyph(char)
             end
 
-            if glyph.outline.tags.length == 0
+            if glyph.outline.tags.empty?
               notdef_indexes << index
               glyph = f.notdef
             end
@@ -90,7 +90,7 @@ module Text2svg
 
           width_by_line = lines.zip(first_hori_bearing_x).map do |(line, hori_bearing_x)|
             before_char = nil
-            if 0 < line.length
+            if line.empty?.!
               line.map { |cs|
                 cs.width = if cs == line.last
                   [cs.width, cs.hori_advance].max
@@ -130,10 +130,11 @@ module Text2svg
 
             output << %!<g transform="matrix(1,0,0,1,0,#{y.to_i})">\n!
 
+            x -= hori_bearing_x
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
               if cs.draw?
-                output << %!  <path transform="matrix(1,0,0,1,#{x.to_i - hori_bearing_x},0)" d="#{cs.outline2d.to_d}"/>\n!
+                output << %!  <path transform="matrix(1,0,0,1,#{x.to_i},0)" d="#{cs.outline2d.to_d}"/>\n!
               end
               x += cs.width
               x += inter_char_space if cs != line.last
