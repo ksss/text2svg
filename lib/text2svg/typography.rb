@@ -38,7 +38,7 @@ module Text2svg
 
         notdef_indexes = []
         unless option.font
-          raise OptionError, 'should be set `font\' option'
+          raise OptionError, 'should set `font\' option'
         end
         FreeType::API::Font.open(File.expand_path(option.font)) do |f|
           f.set_char_size(0, 0, 3000, 3000)
