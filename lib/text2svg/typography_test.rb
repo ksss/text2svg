@@ -28,19 +28,21 @@ module Text2svgTypographyTest
             opt.bold = bold
             [false, true].each do |italic|
               opt.italic = italic
-              begin
-                c = Text2svg::Typography.build('A', opt)
-              rescue
-                t.log(opt)
-                raise
-              end
+              ['ABC', "\n", "\n\nA", "", "A\nB\n\n", "A\n\n\nC"].each do |text|
+                begin
+                  c = Text2svg::Typography.build(text, opt)
+                rescue => e
+                  t.log("raise error #{e.class}: #{e.message} with text=\"#{text}\",opt=#{opt}")
+                  raise
+                end
 
-              unless Text2svg::Content === c
-                t.error('return value was break')
-              end
+                unless Text2svg::Content === c
+                  t.error('return value was break')
+                end
 
-              unless c.data.encoding == Encoding::UTF_8
-                t.error('encoding was changed')
+                unless c.data.encoding == Encoding::UTF_8
+                  t.error('encoding was changed')
+                end
               end
             end
           end

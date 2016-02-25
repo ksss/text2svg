@@ -46,12 +46,13 @@ module Text2svg
           lines = []
           line = []
           lines << line
-          first_hori_bearing_x = []
+          first_hori_bearing_x = [0]
 
           space_width = f.glyph(' '.freeze).char_width
           text.each_char.with_index do |char, index|
             if NEW_LINE.match char
               line = []
+              first_hori_bearing_x << 0
               lines << line
               next
             end
@@ -78,7 +79,7 @@ module Text2svg
               [space_width, space_width, false]
             else
               if line.empty?
-                first_hori_bearing_x << glyph.metrics[:horiBearingX]
+                first_hori_bearing_x[first_hori_bearing_x.length - 1] = glyph.metrics[:horiBearingX]
               end
               [glyph.metrics[:horiAdvance], glyph.metrics[:width], true]
             end
