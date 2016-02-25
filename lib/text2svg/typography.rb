@@ -79,7 +79,7 @@ module Text2svg
               [space_width, space_width, false]
             else
               if line.empty?
-                first_hori_bearing_x[first_hori_bearing_x.length - 1] = glyph.metrics[:horiBearingX]
+                first_hori_bearing_x[-1] = glyph.metrics[:horiBearingX]
               end
               [glyph.metrics[:horiAdvance], glyph.metrics[:width], true]
             end
