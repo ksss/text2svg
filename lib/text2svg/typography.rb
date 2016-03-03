@@ -93,7 +93,7 @@ module Text2svg
             before_char = nil
             if line.empty?.!
               line.map { |cs|
-                cs.width = if cs == line.last
+                cs.width = if cs.equal?(line.last)
                   [cs.width, cs.hori_advance].max
                 else
                   cs.hori_advance
