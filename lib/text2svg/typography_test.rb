@@ -28,7 +28,7 @@ module Text2svgTypographyTest
             opt.bold = bold
             [false, true].each do |italic|
               opt.italic = italic
-              ['ABC', "\n", "\n\nA", "", "A\nB\n\n", "A\n\n\nC"].each do |text|
+              ['ABC', "\n", "\n\nA", "", "A\nB\n\n", "A\n\n\nC", "<", ">", "&", "=", "@", "%", "#", "("].each do |text|
                 begin
                   c = Text2svg::Typography.build(text, opt)
                 rescue => e

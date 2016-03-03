@@ -1,3 +1,4 @@
+require 'cgi'
 require 'freetype'
 require 'text2svg/option'
 
@@ -19,7 +20,7 @@ module Text2svg
         end
         content = path(text, option)
         svg = %(<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 #{content.width} #{content.height}">\n)
-        svg << "<title>#{text}</title>\n"
+        svg << "<title>#{CGI.escapeHTML(text.to_s)}</title>\n"
         svg << content.data
         svg << "</svg>\n"
         Content.new(svg, content.width, content.height, content.notdef_indexes)
