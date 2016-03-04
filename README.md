@@ -1,5 +1,7 @@
 # Text2svg
 
+[![Build Status](https://travis-ci.org/ksss/text2svg.svg?branch=master)](https://travis-ci.org/ksss/text2svg)
+
 Build svg path data from font file
 
 Using by freetype API
