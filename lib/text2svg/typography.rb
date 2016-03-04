@@ -74,17 +74,24 @@ module Text2svg
             glyph.bold if option.bold
             glyph.italic if option.italic
 
-            hori_advance, width, is_draw = if IDEOGRAPHIC_SPACE.match char
-              [space_width * 2r, space_width * 2r, false]
-            elsif WHITESPACE.match char
-              [space_width, space_width, false]
-            else
-              if line.empty?
-                first_hori_bearing_x[-1] = glyph.metrics[:horiBearingX]
+            metrics = FreeType::C::FT_Glyph_Metrics.new
+            is_draw = if IDEOGRAPHIC_SPACE.match char
+              FreeType::C::FT_Glyph_Metrics.members.each do |m|
+                metrics[m] = space_width * 2r
               end
-              [glyph.metrics[:horiAdvance], glyph.metrics[:width], true]
+              false
+            elsif WHITESPACE.match char
+              FreeType::C::FT_Glyph_Metrics.members.each do |m|
+                metrics[m] = space_width
+              end
+              false
+            else
+              FreeType::C::FT_Glyph_Metrics.members.each do |m|
+                metrics[m] = glyph.metrics[m]
+              end
+              true
             end
-            line << CharSet.new(char, hori_advance, width, is_draw, glyph.outline.svg_path_data)
+            line << CharSet.new(char, metrics, is_draw, glyph.outline.svg_path_data)
           end
 
           inter_char_space = space_width / INTER_CHAR_SPACE_DIV
@@ -93,12 +100,12 @@ module Text2svg
             before_char = nil
             if line.empty?.!
               line.map { |cs|
-                cs.width = if cs.equal?(line.last)
-                  [cs.width, cs.hori_advance].max
+                cs.metrics[:width] = if cs.equal?(line.last)
+                  [cs.metrics[:width], cs.metrics[:horiAdvance]].max
                 else
-                  cs.hori_advance
+                  cs.metrics[:horiAdvance]
                 end
-                w = cs.width + f.kerning_unfitted(before_char, cs.char).x
+                w = cs.metrics[:width] + f.kerning_unfitted(before_char, cs.char).x
                 w.tap { before_char = cs.char }
               }.inject(:+) + (line.length - 1) * inter_char_space - [0, hori_bearing_x].min
             else
@@ -137,7 +144,7 @@ module Text2svg
               if cs.draw?
                 output << %!  <path transform="matrix(1,0,0,1,#{x.to_i},0)" d="#{cs.outline2d.join(' '.freeze)}"/>\n!
               end
-              x += cs.width
+              x += cs.metrics[:width]
               x += inter_char_space if cs != line.last
               before_char = cs.char
             end
@@ -153,7 +160,7 @@ module Text2svg
     end
   end
 
-  CharSet = Struct.new(:char, :hori_advance, :width, :is_draw, :outline2d) do
+  CharSet = Struct.new(:char, :metrics, :is_draw, :outline2d) do
     def draw?
       is_draw
     end
