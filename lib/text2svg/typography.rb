@@ -47,13 +47,14 @@ module Text2svg
           lines = []
           line = []
           lines << line
-          first_hori_bearing_x = [0]
+          min_hori_bearing_x_by_line = [0]
 
           space_width = f.glyph(' '.freeze).char_width
           text.each_char.with_index do |char, index|
             if NEW_LINE.match char
+              min_hori_bearing_x_by_line[-1] = min_hori_bearing_x(line)
+              min_hori_bearing_x_by_line << 0
               line = []
-              first_hori_bearing_x << 0
               lines << line
               next
             end
@@ -94,20 +95,22 @@ module Text2svg
             line << CharSet.new(char, metrics, is_draw, glyph.outline.svg_path_data)
           end
 
+          min_hori_bearing_x_by_line[-1] = min_hori_bearing_x(line)
           inter_char_space = space_width / INTER_CHAR_SPACE_DIV
+          min_hori_bearing_x_all = min_hori_bearing_x_by_line.min
 
-          width_by_line = lines.zip(first_hori_bearing_x).map do |(line, hori_bearing_x)|
+          width_by_line = lines.map do |line|
             before_char = nil
             if line.empty?.!
               line.map { |cs|
-                cs.metrics[:width] = if cs.equal?(line.last)
-                  [cs.metrics[:width], cs.metrics[:horiAdvance]].max
+                width = if cs.equal?(line.last)
+                  cs.metrics[:width] + cs.metrics[:horiBearingX]
                 else
                   cs.metrics[:horiAdvance]
                 end
-                w = cs.metrics[:width] + f.kerning_unfitted(before_char, cs.char).x
+                w = width + f.kerning_unfitted(before_char, cs.char).x
                 w.tap { before_char = cs.char }
-              }.inject(:+) + (line.length - 1) * inter_char_space - [0, hori_bearing_x].min
+              }.inject(:+) + (line.length - 1) * inter_char_space - min_hori_bearing_x_all
             else
               0
             end
@@ -120,7 +123,7 @@ module Text2svg
 
           output << %(<g #{option.attribute}>\n) if option.attribute
 
-          lines.zip(width_by_line, first_hori_bearing_x).each do |(line, line_width, hori_bearing_x)|
+          lines.zip(width_by_line).each do |(line, line_width)|
             x = 0r
             y += line_height
             before_char = nil
@@ -138,13 +141,13 @@ module Text2svg
 
             output << %!<g transform="matrix(1,0,0,1,0,#{y.to_i})">\n!
 
-            x -= hori_bearing_x
+            x -= min_hori_bearing_x_all
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x.to_i
               if cs.draw?
                 output << %!  <path transform="matrix(1,0,0,1,#{x.to_i},0)" d="#{cs.outline2d.join(' '.freeze)}"/>\n!
               end
-              x += cs.metrics[:width]
+              x += cs.metrics[:horiAdvance]
               x += inter_char_space if cs != line.last
               before_char = cs.char
             end
@@ -156,6 +159,19 @@ module Text2svg
           option_width += space_width / 1.5 if option.italic
           Content.new(output, (max_width + option_width).to_i, (y + line_height / 4).to_i, notdef_indexes)
         end
+      end
+
+      private
+
+      def min_hori_bearing_x(line)
+        return 0 if line.empty?
+        point = 0
+        bearings = line.map do |cs|
+          (cs.metrics[:horiBearingX] + point).tap {
+            point += cs.metrics[:horiAdvance]
+          }
+        end
+        [bearings.min, 0].min
       end
     end
   end
