@@ -61,7 +61,7 @@ module Text2svgTypographyTest
 
   def benchmark_build(b)
     str = [*'!'..'z'].join
-    opt = Text2svg::Option.new('/Library/Fonts/Times New Roman.ttf')
+    opt = Text2svg::Option.new('data/sporq.ttf')
     b.reset_timer
     i = 0
     while i < b.n
