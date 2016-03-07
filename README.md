@@ -7,7 +7,8 @@ Build svg path data from font file
 Using by freetype API
 
 ```
-$ text2svg "Hello, World\!" --font="/Library/Fonts/Times New Roman.ttf" > test.svg && open test.svg -a /Applications/Google\ Chrome.app
+$ text2svg "Hello, World\!" --font="/Library/Fonts/Times New Roman.ttf" > test.svg
+$ open test.svg -a /Applications/Google\ Chrome.app
 ```
 
 ![img](https://raw.githubusercontent.com/ksss/text2svg/master/data/sample.jpg)
@@ -24,6 +25,14 @@ Usage: text2svg [options]
         --italic                     oblique outline (default false)
         --attribute STRING           decorate options (default nil)(e.g. fill="red" stroke-width="100")
 ```
+
+## Feature
+
+- Support kerning shift
+- Support multi line
+- Support decorated font
+- Support `.ttf` and `.otf` font file (using by FreeType)
+- And support text-align, bold and italic effects
 
 ## Ruby API
 
