@@ -32,7 +32,7 @@ Usage: text2svg [options]
 - Support multi line
 - Support decorated font
 - Support `.ttf` and `.otf` font file (using by FreeType)
-- And support text-align, bold and italic effects
+- And support text-align, **bold** and _italic_ effects
 
 ## Ruby API
 
