@@ -171,7 +171,7 @@ module Text2svg
             point += cs.metrics[:horiAdvance]
           }
         end
-        [bearings.min, 0].min
+        bearings.min
       end
     end
   end
