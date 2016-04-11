@@ -27,6 +27,9 @@ module Text2svg
         opt.on('--attribute STRING', 'decorate options (default nil)(e.g. fill="red" stroke-width="100")') do |arg|
           o.attribute = arg
         end
+        opt.on('--char-size WCHAR,HCHAR,HDPI,VDPI', 'char size set (default "0,0,3000,3000")') do |arg|
+          o.char_size = arg
+        end
       }.parse!(ARGV)
       unless o.font
         raise ArgumentError, 'require `--font` cli option. see --help'

@@ -20,28 +20,31 @@ module Text2svgTypographyTest
           [nil, 'fill="red"'].each do |attribute|
             [false, true].each do |bold|
               [false, true].each do |italic|
-                opt = Text2svg::Option.default
-                opt.font = font
-                opt.text_align = text_align
-                opt.encoding = encoding
-                opt.attribute = attribute
-                opt.bold = bold
-                opt.italic = italic
+                ["0,0,0,0", "128,128,100,100"].each do |char_size|
+                  opt = Text2svg::Option.default
+                  opt.font = font
+                  opt.text_align = text_align
+                  opt.encoding = encoding
+                  opt.attribute = attribute
+                  opt.bold = bold
+                  opt.italic = italic
+                  opt.char_size = char_size
 
-                ['ABC', "\n", "\n\nA", "", "A\nB\n\n", "A\n\n\nC", "<", ">", "&", "=", "@", "%", "#", "("].each do |text|
-                  begin
-                    c = Text2svg::Typography.build(text, opt)
-                  rescue => e
-                    t.log("raise error #{e.class}: #{e.message} with text=\"#{text}\",opt=#{opt}")
-                    raise
-                  end
+                  ['ABC', "\n", "\n\nA", "", "A\nB\n\n", "A\n\n\nC", "<", ">", "&", "=", "@", "%", "#", "("].each do |text|
+                    begin
+                      c = Text2svg::Typography.build(text, opt)
+                    rescue => e
+                      t.log("raise error #{e.class}: #{e.message} with text=\"#{text}\",opt=#{opt}")
+                      raise
+                    end
 
-                  unless Text2svg::Content === c
-                    t.error('return value was break')
-                  end
+                    unless Text2svg::Content === c
+                      t.error('return value was break')
+                    end
 
-                  unless c.data.encoding == Encoding::UTF_8
-                    t.error('encoding was changed')
+                    unless c.data.encoding == Encoding::UTF_8
+                      t.error('encoding was changed')
+                    end
                   end
                 end
               end

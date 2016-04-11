@@ -41,8 +41,12 @@ module Text2svg
         unless option.font
           raise OptionError, 'should set `font\' option'
         end
+        char_sizes = option.char_size.split(',').map(&:to_i)
+        unless char_sizes.length == 4
+          raise OptionError, 'char-size option should be four integer values'
+        end
         FreeType::API::Font.open(File.expand_path(option.font)) do |f|
-          f.set_char_size(0, 0, 3000, 3000)
+          f.set_char_size(*char_sizes)
 
           lines = []
           line = []

@@ -6,6 +6,7 @@ module Text2svg
     :bold,
     :italic,
     :attribute,
+    :char_size,
   )
     DEFAULTS = [
       nil,             # font
@@ -14,6 +15,7 @@ module Text2svg
       false,           # bold
       false,           # italic
       nil,             # attribute
+      "0,0,3000,3000", # char_size
     ]
 
     class << self
