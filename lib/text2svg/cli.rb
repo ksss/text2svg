@@ -5,14 +5,9 @@ require 'text2svg/option'
 module Text2svg
   module CLI
     def start
-      o = Option.new(
-        nil,             # font
-        :left,           # text_align
-        Encoding::UTF_8, # encoding
-        false,           # bold
-        false,           # italic
-        nil,             # attribute
-      )
+      # defaults
+      o = Option.default
+
       OptionParser.new.tap { |opt|
         opt.on('-f', '--font FONT', 'font file path (require)') do |arg|
           o.font = arg

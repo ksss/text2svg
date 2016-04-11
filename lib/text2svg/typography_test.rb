@@ -20,7 +20,7 @@ module Text2svgTypographyTest
           [nil, 'fill="red"'].each do |attribute|
             [false, true].each do |bold|
               [false, true].each do |italic|
-                opt = Text2svg::Option.new
+                opt = Text2svg::Option.default
                 opt.font = font
                 opt.text_align = text_align
                 opt.encoding = encoding
@@ -61,7 +61,8 @@ module Text2svgTypographyTest
 
   def benchmark_build(b)
     str = [*'!'..'z'].join
-    opt = Text2svg::Option.new('data/sporq.ttf')
+    opt = Text2svg::Option.default
+    opt.font = 'data/sporq.ttf'
     b.reset_timer
     i = 0
     while i < b.n
