@@ -2,7 +2,7 @@ language: ruby
 before_install:
   - sudo apt-get install -qq libfreetype6-dev
 rvm:
-  - 2.1.10
+  - 2.1.7 # travis-ci issue
   - 2.2.4
   - 2.3.0
 matrix:
