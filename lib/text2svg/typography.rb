@@ -31,7 +31,7 @@ module Text2svg
           option = Option.from_hash(option)
         end
         text = String.try_convert(text)
-        return Content.new('', 0, 0) if text.nil? || text.empty?
+        return Content.new('', 0, 0, []) if text.nil? || text.empty?
 
         option.encoding ||= Encoding::UTF_8
         option.text_align ||= :left

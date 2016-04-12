@@ -49,6 +49,10 @@ module Text2svgTypographyTest
                     unless Integer === c.height
                       t.error('return value was break')
                     end
+                    unless Array === c.notdef_indexes
+                      t.error('return value was break')
+                    end
+
                     unless c.data.encoding == Encoding::UTF_8
                       t.error('encoding was changed')
                     end
