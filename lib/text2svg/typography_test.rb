@@ -30,7 +30,7 @@ module Text2svgTypographyTest
                   opt.italic = italic
                   opt.char_size = char_size
 
-                  ['ABC', "\n", "\n\nA", "", "A\nB\n\n", "A\n\n\nC", "<", ">", "&", "=", "@", "%", "#", "("].each do |text|
+                  ['ABC', "\n", "\n\nA", "", "A\nB\n\n", "A\n  \n\nC", "<", ">", "&", "=", "@", "%", "#", "("].each do |text|
                     begin
                       c = Text2svg::Typography.build(text, opt)
                     rescue => e
