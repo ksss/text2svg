@@ -179,8 +179,8 @@ module Text2svg
           Content.new(
             output,
             (max_width + option_width).to_i,
-            y.to_i - f.face[:size][:metrics][:descender] * 1.2,
-            notdef_indexes
+            (y.to_i - f.face[:size][:metrics][:descender] * 1.2).ceil,
+            notdef_indexes,
           )
         end
       end

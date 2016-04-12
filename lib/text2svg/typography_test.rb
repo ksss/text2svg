@@ -42,6 +42,13 @@ module Text2svgTypographyTest
                       t.error('return value was break')
                     end
 
+                    unless Integer === c.width
+                      t.error('return value was break')
+                    end
+
+                    unless Integer === c.height
+                      t.error('return value was break')
+                    end
                     unless c.data.encoding == Encoding::UTF_8
                       t.error('encoding was changed')
                     end
