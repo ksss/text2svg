@@ -143,7 +143,7 @@ module Text2svg
           lines.zip(width_by_line).each_with_index do |(line, line_width), index|
             x = 0r
             y += if index == 0
-              line.map { |cs| cs.metrics[:horiBearingY] }.max
+              line.map { |cs| cs.metrics[:horiBearingY] }.max || 0
             else
               line_height
             end
@@ -181,7 +181,7 @@ module Text2svg
           Content.new(
             output,
             (max_width + option_width).to_i,
-            (y + lines.last.map { |cs| cs.metrics[:height] - cs.metrics[:horiBearingY] }.max).to_i,
+            (y + (lines.last.map { |cs| cs.metrics[:height] - cs.metrics[:horiBearingY] }.max || 0)).to_i,
             notdef_indexes
           )
         end
