@@ -138,9 +138,13 @@ module Text2svg
           output = ''
           output << %(<g #{option.attribute}>\n) if option.attribute
 
-          lines.zip(width_by_line).each do |(line, line_width)|
+          lines.zip(width_by_line).each_with_index do |(line, line_width), index|
             x = 0r
-            y += f.face[:size][:metrics][:ascender]
+            y += if index == 0
+              f.face[:size][:metrics][:ascender]
+            else
+              f.line_height
+            end
             before_char = nil
 
             case option.text_align.to_sym
@@ -166,7 +170,6 @@ module Text2svg
               x += inter_char_space if cs != line.last
               before_char = cs.char
             end
-            y -= f.face[:size][:metrics][:descender] * 1.2
             output << "</g>\n".freeze
           end
           output << "</g>\n".freeze if option.attribute
@@ -176,7 +179,7 @@ module Text2svg
           Content.new(
             output,
             (max_width + option_width).to_i,
-            y.to_i,
+            y.to_i - f.face[:size][:metrics][:descender] * 1.2,
             notdef_indexes
           )
         end
