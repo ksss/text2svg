@@ -81,19 +81,32 @@ module Text2svg
 
             metrics = FreeType::C::FT_Glyph_Metrics.new
             is_draw = if IDEOGRAPHIC_SPACE.match char
-              FreeType::C::FT_Glyph_Metrics.members.each do |m|
-                metrics[m] = space_width * 2r
-              end
+              metrics[:width] = space_width * 2r
+              metrics[:height] = 0
+              metrics[:horiBearingX] = space_width * 2r
+              metrics[:horiBearingY] = 0
+              metrics[:horiAdvance] = space_width * 2r
+              metrics[:vertBearingX] = 0
+              metrics[:vertBearingY] = 0
+              metrics[:vertAdvance] = 0
+
               false
             elsif WHITESPACE.match char
-              FreeType::C::FT_Glyph_Metrics.members.each do |m|
-                metrics[m] = space_width
-              end
+              metrics[:width] = space_width
+              metrics[:height] = 0
+              metrics[:horiBearingX] = space_width
+              metrics[:horiBearingY] = 0
+              metrics[:horiAdvance] = space_width
+              metrics[:vertBearingX] = 0
+              metrics[:vertBearingY] = 0
+              metrics[:vertAdvance] = 0
+
               false
             else
               FreeType::C::FT_Glyph_Metrics.members.each do |m|
                 metrics[m] = glyph.metrics[m]
               end
+
               true
             end
             line << CharSet.new(char, metrics, is_draw, glyph.outline.svg_path_data)
@@ -127,9 +140,13 @@ module Text2svg
 
           output << %(<g #{option.attribute}>\n) if option.attribute
 
-          lines.zip(width_by_line).each do |(line, line_width)|
+          lines.zip(width_by_line).each_with_index do |(line, line_width), index|
             x = 0r
-            y += line_height
+            y += if index == 0
+              line.map { |cs| cs.metrics[:horiBearingY] }.max
+            else
+              line_height
+            end
             before_char = nil
 
             case option.text_align.to_sym
@@ -161,7 +178,12 @@ module Text2svg
 
           option_width = 0
           option_width += space_width / 1.5 if option.italic
-          Content.new(output, (max_width + option_width).to_i, (y + line_height / 4).to_i, notdef_indexes)
+          Content.new(
+            output,
+            (max_width + option_width).to_i,
+            (y + lines.last.map { |cs| cs.metrics[:height] - cs.metrics[:horiBearingY] }.max).to_i,
+            notdef_indexes
+          )
         end
       end
 
