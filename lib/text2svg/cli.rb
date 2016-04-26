@@ -30,6 +30,9 @@ module Text2svg
         opt.on('--char-size WCHAR,HCHAR,HDPI,VDPI', 'char size set (default "0,0,3000,3000")') do |arg|
           o.char_size = arg
         end
+        opt.on('--scale NUM', 'scale (default 1)', Numeric) do |arg|
+          o.scale = arg
+        end
       }.parse!(ARGV)
       unless o.font
         raise ArgumentError, 'require `--font` cli option. see --help'
