@@ -141,33 +141,34 @@ module Text2svg
           lines.zip(width_by_line).each_with_index do |(line, line_width), index|
             x = 0r
             y += if index == 0
-              f.face[:size][:metrics][:ascender]
+              f.face[:size][:metrics][:ascender] * option.scale
             else
-              f.line_height
+              f.line_height * option.scale
             end
             before_char = nil
 
             case option.text_align.to_sym
             when :center
-              x += (max_width - line_width) / 2r
+              x += (max_width - line_width) / 2r * option.scale
             when :right
-              x += max_width - line_width
+              x += (max_width - line_width) * option.scale
             when :left
               # nothing
             else
               warn 'text_align must be left,right or center'
             end
 
-            output << %!<g transform="matrix(1,0,0,1,0,#{y.to_i})">\n!
+            output << %!<g transform="matrix(1,0,0,1,0,#{y.round})">\n!
 
-            x -= min_hori_bearing_x_all
+            x -= min_hori_bearing_x_all * option.scale
             line.each do |cs|
-              x += f.kerning_unfitted(before_char, cs.char).x.to_i
+              x += f.kerning_unfitted(before_char, cs.char).x * option.scale
               if cs.draw?
-                output << %!  <path transform="matrix(1,0,0,1,#{x.to_i},0)" d="#{cs.outline2d.join(' '.freeze)}"/>\n!
+                d = cs.outline2d.map { |cmd, *points| [cmd, *(points.map { |i| i * option.scale })] }
+                output << %!  <path transform="matrix(1,0,0,1,#{x.round},0)" d="#{d.join(' '.freeze)}"/>\n!
               end
-              x += cs.metrics[:horiAdvance]
-              x += inter_char_space if cs != line.last
+              x += cs.metrics[:horiAdvance] * option.scale
+              x += inter_char_space * option.scale if cs != line.last
               before_char = cs.char
             end
             output << "</g>\n".freeze
@@ -175,11 +176,11 @@ module Text2svg
           output << "</g>\n".freeze if option.attribute
 
           option_width = 0
-          option_width += space_width / 1.5 if option.italic
+          option_width += (space_width / 1.5 * option.scale) if option.italic
           Content.new(
             output,
-            (max_width + option_width).to_i,
-            (y.to_i - f.face[:size][:metrics][:descender] * 1.2).ceil,
+            ((max_width + option_width) * option.scale).ceil,
+            (y - f.face[:size][:metrics][:descender] * 1.2 * option.scale).ceil,
             notdef_indexes,
           )
         end
