@@ -161,10 +161,11 @@ module Text2svg
             output << %!<g transform="matrix(1,0,0,1,0,#{y.round})">\n!
 
             x -= min_hori_bearing_x_all * option.scale
+            sr = option.scale.rationalize
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x * option.scale
               if cs.draw?
-                d = cs.outline2d.map { |cmd, *points| [cmd, *(points.map { |i| i * option.scale })] }
+                d = cs.outline2d.map { |cmd, *points| [cmd, *(points.map { |i| i.rationalize * sr }.map(&:to_f))] }
                 output << %!  <path transform="matrix(1,0,0,1,#{x.round},0)" d="#{d.join(' '.freeze)}"/>\n!
               end
               x += cs.metrics[:horiAdvance] * option.scale
