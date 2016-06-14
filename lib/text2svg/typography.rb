@@ -165,7 +165,16 @@ module Text2svg
             line.each do |cs|
               x += f.kerning_unfitted(before_char, cs.char).x * option.scale
               if cs.draw?
-                d = cs.outline2d.map { |cmd, *points| [cmd, *points.map { |i| i.rationalize * sr }.map(&:to_f)] }
+                d = cs.outline2d.map { |cmd, *points|
+                  [
+                    cmd,
+                    *points.map { |i|
+                      i.rationalize * sr
+                    }.map { |i|
+                      i.denominator == 1 ? i.to_i : i.to_f
+                    },
+                  ]
+                }
                 output << %!  <path transform="matrix(1,0,0,1,#{x.round},0)" d="#{d.join(' '.freeze)}"/>\n!
               end
               x += cs.metrics[:horiAdvance] * option.scale
